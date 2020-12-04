@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
 
-		val viewModel = MainActivityViewModel()
+		val viewModel = MainActivityViewModel(this)
 
 		searchButton.setOnClickListener {
 			if (searchTerm.text.toString().isEmpty()) {
