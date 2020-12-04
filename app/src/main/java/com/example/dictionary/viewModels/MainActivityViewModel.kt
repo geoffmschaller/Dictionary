@@ -4,10 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.dictionary.data.WordRepository
 import com.example.dictionary.data.responses.DictionaryResponse
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import java.lang.Exception
 
 class MainActivityViewModel : ViewModel() {
 
@@ -15,10 +13,16 @@ class MainActivityViewModel : ViewModel() {
 	private val job = Job()
 	private val uiScope = CoroutineScope(Dispatchers.Main + job)
 	val searchedWord = MutableLiveData<DictionaryResponse>()
+	val errorMessage = MutableLiveData<String>()
 
 	fun getWord(word: String) {
 		uiScope.launch {
-			searchedWord.value = repo.getWord(word)
+			try {
+				searchedWord.value = repo.getWord(word)
+			} catch (e: Exception) {
+				errorMessage.value = "I could not find that word. Sory :("
+			}
+
 		}
 	}
 
