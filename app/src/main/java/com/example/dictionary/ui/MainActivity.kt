@@ -3,6 +3,7 @@ package com.example.dictionary.ui
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -29,13 +30,14 @@ class MainActivity : AppCompatActivity() {
 		binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
 		searchButton.setOnClickListener {
-			if (searchTerm.text.toString().isEmpty()) {
-				Toast.makeText(this, "A Word is required", Toast.LENGTH_SHORT).show()
-			} else {
-				viewModel.getWord(searchTerm.text.toString())
-				val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-				imm?.hideSoftInputFromWindow(it.windowToken, 0)
-				searchTerm.text.clear()
+			when (searchTerm.text.toString().isEmpty()) {
+				true -> Toast.makeText(this, "A Word is required", Toast.LENGTH_SHORT).show()
+				else -> {
+					viewModel.getWord(searchTerm.text.toString())
+					searchTerm.text.clear()
+					searchTerm.clearFocus()
+					hideKeyboard(it)
+				}
 			}
 		}
 
@@ -51,6 +53,10 @@ class MainActivity : AppCompatActivity() {
 			resultType.text = ""
 		})
 
+	}
 
+	private fun hideKeyboard(view: View) {
+		val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+		imm?.hideSoftInputFromWindow(view.windowToken, 0)
 	}
 }
