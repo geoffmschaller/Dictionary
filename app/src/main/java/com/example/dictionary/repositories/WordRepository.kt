@@ -1,4 +1,4 @@
-package com.example.dictionary.data.repo
+package com.example.dictionary.repositories
 
 import com.example.dictionary.data.remote.DictionaryAPI
 import com.example.dictionary.data.responses.APIResponse

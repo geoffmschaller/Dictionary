@@ -1,25 +1,24 @@
 package com.example.dictionary.viewModels
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.dictionary.data.repo.WordRepository
+import com.example.dictionary.repositories.WordRepository
 import com.example.dictionary.data.responses.APIResponse
 import kotlinx.coroutines.*
 import java.lang.Exception
 
-class MainActivityViewModel(context: Context) : ViewModel() {
+class MainActivityViewModel : ViewModel() {
 
-	private val repo = WordRepository()
-	private val job = Job()
-	private val uiScope = CoroutineScope(Dispatchers.Main + job)
+	private val wordRepository = WordRepository()
+	private val coroutineJob = Job()
+	private val uiScope = CoroutineScope(Dispatchers.Main + coroutineJob)
 	val searchedWord = MutableLiveData<APIResponse>()
 	val errorMessage = MutableLiveData<String>()
 
 	fun getWord(word: String) {
 		uiScope.launch {
 			try {
-				searchedWord.value = repo.getWord(word)
+				searchedWord.value = wordRepository.getWord(word)
 			} catch (e: Exception) {
 				errorMessage.value = "I could not find that word..."
 			}
@@ -28,7 +27,7 @@ class MainActivityViewModel(context: Context) : ViewModel() {
 
 	override fun onCleared() {
 		super.onCleared()
-		job.cancel()
+		coroutineJob.cancel()
 	}
 
 }
