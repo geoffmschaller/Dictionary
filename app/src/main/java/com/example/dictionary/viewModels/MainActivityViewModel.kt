@@ -13,10 +13,10 @@ import java.lang.Exception
 
 class MainActivityViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
 	override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-		if (modelClass.isAssignableFrom(MainActivityViewModel::class.java)) {
-			return MainActivityViewModel(context) as T
+		when (modelClass.isAssignableFrom(MainActivityViewModel::class.java)) {
+			true -> return MainActivityViewModel(context) as T
+			else -> throw IllegalArgumentException("Unknown ViewModel")
 		}
-		throw IllegalArgumentException("Unknown ViewModel")
 	}
 }
 
@@ -35,7 +35,7 @@ class MainActivityViewModel(context: Context) : ViewModel() {
 				searchedWord.value = wordRepository.getWord(db, word)
 			} catch (e: Exception) {
 				errorMessage.value = "I could not find that word..."
-				Log.i("GEOFF", e.localizedMessage.toString())
+				Log.i("GEOFF", e.toString())
 			}
 		}
 	}
