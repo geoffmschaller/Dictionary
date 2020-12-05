@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.dictionary.R
 import com.example.dictionary.databinding.ActivityMainBinding
 import com.example.dictionary.viewModels.MainActivityViewModel
+import com.example.dictionary.viewModels.MainActivityViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -21,7 +22,10 @@ class MainActivity : AppCompatActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 
-		viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+		viewModel = ViewModelProvider(
+			this,
+			MainActivityViewModelFactory(this)
+		).get(MainActivityViewModel::class.java)
 		binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
 		searchButton.setOnClickListener {
@@ -37,8 +41,8 @@ class MainActivity : AppCompatActivity() {
 
 		viewModel.searchedWord.observe(this, Observer {
 			resultWord.text = it.word
-			resultType.text = it.definitions[0].type
-			resultDefinition.text = it.definitions[0].definition
+			resultType.text = it.part
+			resultDefinition.text = it.definition
 		})
 
 		viewModel.errorMessage.observe(this, Observer {
